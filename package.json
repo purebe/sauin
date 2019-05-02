@@ -11,7 +11,8 @@
     "@babylonjs/materials": "^4.0.3",
     "@babylonjs/post-processes": "^4.0.3",
     "@babylonjs/procedural-textures": "^4.0.3",
-    "@babylonjs/serializers": "^4.0.3"
+    "@babylonjs/serializers": "^4.0.3",
+    "pepjs": "^0.5.2"
   },
   "devDependencies": {
     "webpack": "^4.30.0",
