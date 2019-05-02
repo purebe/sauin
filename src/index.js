@@ -8,15 +8,23 @@ import { Mesh } from '@babylonjs/core/Meshes/mesh';
 import { GridMaterial } from '@babylonjs/materials/grid';
 
 import '@babylonjs/core/Meshes/meshBuilder';
-import 'pepjs';
+import '@babylonjs/core/Physics/physicsEngineComponent';
+
+const Ammo = require('./libs/ammo.js');
+import { AmmoJSPlugin } from '@babylonjs/core/Physics/Plugins/ammoJSPlugin';
 
 const canvas = document.createElement('canvas');
 canvas.id = 'renderCanvas';
 canvas.style.touchAction = 'none';
 document.body.append(canvas);
 
-const engine = new Engine(canvas);
+const engine = new Engine(canvas, true, {
+	deterministicLockstep: true,
+	lockstepMaxSteps: 4
+});
 const scene = new Scene(engine);
+const gravity = new Vector3(0, -9.81, 0);
+scene.enablePhysics(gravity, new AmmoJSPlugin(false, Ammo));
 
 const camera = new FreeCamera('camera1', new Vector3(0, 5, -10), scene);
 camera.setTarget(Vector3.Zero());
