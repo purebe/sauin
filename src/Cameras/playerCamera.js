@@ -1,9 +1,5 @@
 import { UniversalCamera } from '@babylonjs/core/Cameras/universalCamera';
 
-function enablePointerLock() {
-	this.requestPointerLock();
-}
-
 export class PlayerCamera extends UniversalCamera {
 	/**
 	* @param {!string} name
@@ -26,10 +22,6 @@ export class PlayerCamera extends UniversalCamera {
 		this.inertia = cameraConfig.interia;
 		this.angularSensibility = cameraConfig.angularSens;
 
-		this.pointerLock = cameraConfig.pointerLock;
 		this.attachControl(canvas, true);
-		if (this.pointerLock) {
-			canvas.addEventListener('click', enablePointerLock);
-		}
 	}
 };

@@ -6,6 +6,10 @@ import { KeybindsConfig } from './Configs/keybindsConfig';
 import { Level } from './Levels/level';
 import { Player } from './Entities/player';
 
+function enablePointerLock() {
+	this.requestPointerLock();
+}
+
 export class Game {
 	/**
 	 * @param {!HTMLCanvasElement} canvas
@@ -32,7 +36,18 @@ export class Game {
 		 * @type {!Scene[]}
 		 */
 		this.scenes = [];
+
+		this.updateConfig();
 	}
+
+	updateConfig() {
+		if (this.cameraConfig.pointerLock) {
+			this.canvas.addEventListener('click', enablePointerLock, true);
+		} else {
+			this.canvas.removeEventListener('click', enablePointerLock, true);
+		}
+	}
+
 
 	start() {
 		this.loadLevel();
