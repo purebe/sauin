@@ -5,4 +5,5 @@ export class Keys {
 	static get D() { return 68; }
 	static get Shift() { return 16; }
 	static get Esc() { return 27; }
+	static get Space() { return 32; }
 }
