@@ -1,4 +1,4 @@
-export class Keys {
+export class KeyCodes {
 	static get W() { return 87; }
 	static get S() { return 83; }
 	static get A() { return 65; }
@@ -39,7 +39,7 @@ export class Keys {
 	static get Slash() { return 191; }
 	static get Backslash() { return 220; }
 
-	static get Tilde() { return 192; }
+	static get Grave() { return 192; }
 	static get One() { return 49; }
 	static get Two() { return 50; }
 	static get Three() { return 51; }

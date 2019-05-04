@@ -3,6 +3,7 @@ import { Vector3 } from '@babylonjs/core/Maths/math';
 
 import { CameraConfig } from './Configs/cameraConfig';
 import { KeybindsConfig } from './Configs/keybindsConfig';
+import { DebugConfig } from './Configs/debugConfig';
 import { Level } from './Levels/level';
 import { Player } from './Entities/player';
 

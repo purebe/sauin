@@ -1,4 +1,4 @@
-import { Keys } from '../Enums/keys';
+import { KeyCodes } from '../Inputs/Keyboard/keyCodes';
 
 export class KeybindsConfig {
 	/**
@@ -11,13 +11,13 @@ export class KeybindsConfig {
 	 * @param {!number[]} [menu]
 	 */
 	constructor(
-		up = [Keys.W],
-		down = [Keys.S],
-		left = [Keys.A],
-		right = [Keys.D],
-		run = [Keys.Shift],
-		jump = [Keys.Space],
-		menu = [Keys.Esc]
+		up = [KeyCodes.W],
+		down = [KeyCodes.S],
+		left = [KeyCodes.A],
+		right = [KeyCodes.D],
+		run = [KeyCodes.Shift],
+		jump = [KeyCodes.Space],
+		menu = [KeyCodes.Esc]
 	) {
 		this.up = up;
 		this.down = down;
