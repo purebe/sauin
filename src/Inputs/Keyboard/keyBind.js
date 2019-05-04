@@ -17,6 +17,9 @@ export class KeyBind extends MKeys(EventEmitter) {
 
 		this._keydown = this.onKeydown.bind(this);
 		this._keyup = this.onKeyup.bind(this);
+
+		this.pressed = false;
+		this.toggled = false;
 	}
 
 	/**
@@ -77,6 +80,7 @@ export class KeyBind extends MKeys(EventEmitter) {
 	 */
 	onKeydown(evt) {
 		if (this.has(evt.code)) {
+			this.pressed = true;
 			this.emitKey('keydown', evt);
 		}
 	}
@@ -86,6 +90,8 @@ export class KeyBind extends MKeys(EventEmitter) {
 	 */
 	onKeyup(evt) {
 		if (this.has(evt.code)) {
+			this.pressed = false;
+			this.toggled = !this.toggled;
 			this.emitKey('keyup', evt);
 		}
 	}

@@ -1,5 +1,8 @@
 import { Engine } from '@babylonjs/core/Engines/engine';
+import { Scene } from '@babylonjs/core/scene';
+import { ArcRotateCamera } from '@babylonjs/core/Cameras/arcRotateCamera';
 import { Vector3 } from '@babylonjs/core/Maths/math';
+import { AdvancedDynamicTexture } from '@babylonjs/gui/2D';
 
 import { CameraConfig } from './Configs/cameraConfig';
 import { KeybindsConfig } from './Configs/keybindsConfig';
@@ -17,13 +20,15 @@ export class Game {
 	 */
 	constructor(canvas) {
 		this.canvas = canvas;
-		this.cameraConfig = new CameraConfig();
-		this.keybindsConfig = new KeybindsConfig();
 
 		this.engine = new Engine(this.canvas, true, {
 			deterministicLockstep: true,
 			lockstepMaxSteps: 4
 		});
+
+		this.cameraConfig = new CameraConfig();
+		this.keybindsConfig = new KeybindsConfig();
+		this.debugConfig = new DebugConfig(this.engine, this.canvas);
 
 		/**
 		 * @type {!Entities[]}
@@ -38,6 +43,11 @@ export class Game {
 		 */
 		this.scenes = [];
 
+		this.uiScene = new Scene(this.engine);
+		this.uiScene.autoClear = false;
+		this.uiCamera = new ArcRotateCamera('uicamera', 0, 0.8, 100, Vector3.Zero(), this.uiScene);
+		this.ui = this.initializeGui();
+		this.debugConfig.enable(this.uiScene, this.ui);
 		this.updateConfig();
 	}
 
@@ -57,6 +67,7 @@ export class Game {
 			this.scenes.forEach(scene =>
 				scene.render()
 			);
+			this.uiScene.render();
 		});
 	}
 
@@ -82,5 +93,12 @@ export class Game {
 		const player = this.getPlayer();
 		const level = new Level(this.engine, this.canvas, this.cameraConfig, this.keybindsConfig, player);
 		this.addScene(level.scene);
+	}
+
+	/**
+	 * @returns {!Scene}
+	 */
+	initializeGui() {
+		return AdvancedDynamicTexture.CreateFullscreenUI('UI', this.uiScene);
 	}
 };

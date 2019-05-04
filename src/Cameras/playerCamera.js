@@ -12,10 +12,10 @@ export class PlayerCamera extends UniversalCamera {
 	constructor(name, position, scene, canvas, cameraConfig, keybindsConfig) {
 		super(name, position, scene);
 
-		this.inputs.attached.keyboard.keysUp = keybindsConfig.up;
-		this.inputs.attached.keyboard.keysDown = keybindsConfig.down;
-		this.inputs.attached.keyboard.keysLeft = keybindsConfig.left;
-		this.inputs.attached.keyboard.keysRight = keybindsConfig.right;
+		this.inputs.attached.keyboard.keysUp = keybindsConfig.up.list().map(key => key.keyCode);
+		this.inputs.attached.keyboard.keysDown = keybindsConfig.down.list().map(key => key.keyCode);
+		this.inputs.attached.keyboard.keysLeft = keybindsConfig.left.list().map(key => key.keyCode);
+		this.inputs.attached.keyboard.keysRight = keybindsConfig.right.list().map(key => key.keyCode);
 
 		this.speed = cameraConfig.speed;
 		this.fov = cameraConfig.fov;

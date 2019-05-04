@@ -1,30 +1,15 @@
 import { Key } from '../Inputs/Keyboard/key';
+import { Keys } from '../Inputs/Keyboard/keys';
 
 export class KeybindsConfig {
-	/**
-	 * @param {!number[]} [up]
-	 * @param {!number[]} [down]
-	 * @param {!number[]} [left]
-	 * @param {!number[]} [right]
-	 * @param {!number[]} [run]
-	 * @param {!number[]} [jump]
-	 * @param {!number[]} [menu]
-	 */
 	constructor(
-		up = [Key.KeyW],
-		down = [Key.KeyS],
-		left = [Key.KeyA],
-		right = [Key.KeyD],
-		run = [Key.ShiftLeft],
-		jump = [Key.Space],
-		menu = [Key.Escape]
 	) {
-		this.up = up;
-		this.down = down;
-		this.left = left;
-		this.right = right;
-		this.run = run;
-		this.jump = jump;
-		this.menu = menu;
+		this.up = new Keys(Key.KeyW);
+		this.down = new Keys(Key.KeyS);
+		this.left = new Keys(Key.KeyA);
+		this.right = new Keys(Key.KeyD);
+		this.run = new Keys(Key.ShiftLeft);
+		this.jump = new Keys(Key.Space);
+		this.menu = new Keys(Key.Escape);
 	}
 };
