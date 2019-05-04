@@ -1,4 +1,4 @@
-import { KeyCodes } from '../Inputs/Keyboard/keyCodes';
+import { Key } from '../Inputs/Keyboard/key';
 
 const EventEmitter = require('events');
 
@@ -9,7 +9,7 @@ export class DebugConfig extends EventEmitter {
 	 * @param {!number[]} [wireframe]
 	 * @param {!number[]} [noclip]
 	 */
-	constructor(fps = [KeyCodes.F1], boundingBoxes = [KeyCodes.F2], wireframe = [KeyCodes.F3], noclip = [KeyCodes.F4]) {
+	constructor(fps = [Key.F1], boundingBoxes = [Key.F2], wireframe = [Key.F3], noclip = [Key.F4]) {
 		this._fps = fps;
 		this._boundingBoxes = boundingBoxes;
 		this._wireframe = wireframe;

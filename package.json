@@ -14,6 +14,7 @@
     "@babylonjs/serializers": "^4.0.3"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
     "karma": "^4.1.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-mocha": "^1.3.0",
@@ -26,6 +27,7 @@
   },
   "scripts": {
     "test": "npx karma start --single-run --browsers ChromeHeadless karma.conf.js",
+	 "test-debug": "npx karma start --browsers Chrome --single-run karma.conf.js",
     "build": "webpack"
   },
   "author": "Purebe"

@@ -1,4 +1,4 @@
-import { KeyCodes } from '../Inputs/Keyboard/keyCodes';
+import { Key } from '../Inputs/Keyboard/key';
 
 const EventEmitter = require('events');
 

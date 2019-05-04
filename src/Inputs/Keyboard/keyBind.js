@@ -1,76 +1,64 @@
+import { MKeys } from './keys';
+
 const EventEmitter = require('events');
 
-export class KeyBind extends EventEmitter {
+export class KeyBind extends MKeys(EventEmitter) {
 	/**
-	 * @param {(!string|!string[])} keys
-	 * @param {!EventEmitter} [bus]
-	 * @param {!boolean} [preventDefault]
+	 * @param {(!VirtualKey|!VirtualKey[]|!MKeys|!MKeys[])} ...keys
 	 */
-	constructor(keys = [], bus = null, preventDefault = true) {
-		super();
-		this.keys = keys;
-		if (bus !== null) {
-			this.on('keydown', evt => bus.emit('keydown', evt));
-			this.on('keyup', evt => bus.emit('keyup', evt));
-		}
-		this.preventDefault = preventDefault;
+	constructor(...keys) {
+		super({vkeys: keys});
+		this.preventsDefault = true;
 
 		/**
-		 * @type {?HTMLCanvasElement}
+		 * @type {?HTMLElement}
 		 */
-		this.canvas = null;
+		this.element = null;
 
 		this._keydown = this.onKeydown.bind(this);
 		this._keyup = this.onKeyup.bind(this);
 	}
 
 	/**
-	 * @param {(!string|!string[])} keys
+	 * @param {!EventEmitter} bus
+	 * @returns {!KeyBind}
 	 */
-	set keys(keys) {
-		this._keys = [];
-		this.add(keys);
+	pipe(bus) {
+		this.on('keydown', evt => bus.emit('keydown', evt));
+		this.on('keyup', evt => bus.emit('keyup', evt));
+		return this;
 	}
 
 	/**
-	 * @returns {!string[]}
+	 * @param {!boolean} [preventDefault]
+	 * @returns {!KeyBind}
 	 */
-	get keys() {
-		return this._keys;
+	preventDefault(preventDefault = true) {
+		this.preventsDefault = preventDefault;
+		return this;
 	}
 
 	/**
-	 * @param {(!number|!number[])} keys
+	 * @param {!HTMLElement} element
+	 * @returns {!KeyBind}
 	 */
-	add(keys) {
-		if (keys === null) {
-			throw new Error(`Keys cannot be null!`);
-		}
-		if (!Array.isArray(keys)) {
-			keys = [keys];
-		}
-		const validStrings = keys.every(key => typeof key === 'string');
-		if (!validStrings) {
-			throw new Error(`Each key must be a string!`);
-		}
-		keys.forEach(key => this._keys.push(key));
+	register(element) {
+		element.addEventListener('keydown', this._keydown, false);
+		element.addEventListener('keyup', this._keyup, false);
+		this.element = element;
+		return this;
 	}
 
 	/**
-	 * @param {!HTMLCanvasElement} canvas
+	 * @returns {!KeyBind}
 	 */
-	register(canvas) {
-		canvas.addEventListener('keydown', this._keydown, false);
-		canvas.addEventListener('keyup', this._keyup, false);
-		this.canvas = canvas;
-	}
-
 	unregister() {
-		if (this.canvas !== null) {
-			this.canvas.removeEventListener('keydown', this._keydown, false);
-			this.canvas.removeEventListener('keyup', this._keyup, false);
-			this.canvas = null;
+		if (this.element !== null) {
+			this.element.removeEventListener('keydown', this._keydown, false);
+			this.element.removeEventListener('keyup', this._keyup, false);
+			this.element = null;
 		}
+		return this;
 	}
 
 	/**
@@ -79,25 +67,16 @@ export class KeyBind extends EventEmitter {
 	 */
 	emitKey(eventName, evt) {
 		this.emit(eventName, evt);
-		if (this.preventDefault) {
+		if (this.preventsDefault) {
 			evt.preventDefault();
 		}
-	}
-
-	/**
-	 * @param {!string} key
-	 * @returns {!boolean}
-	 */
-	matches(key) {
-		key = key.toLowerCase();
-		return this._keys.some(key => key === key);
 	}
 
 	/**
 	 * @param {!KeyboardEvent} evt
 	 */
 	onKeydown(evt) {
-		if (this.matches(evt.key)) {
+		if (this.has(evt.code)) {
 			this.emitKey('keydown', evt);
 		}
 	}
@@ -106,7 +85,7 @@ export class KeyBind extends EventEmitter {
 	 * @param {!KeyboardEvent} evt
 	 */
 	onKeyup(evt) {
-		if (this.matches(evt.key)) {
+		if (this.has(evt.code)) {
 			this.emitKey('keyup', evt);
 		}
 	}
