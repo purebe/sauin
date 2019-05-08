@@ -1,6 +1,6 @@
 import { Engine } from '@babylonjs/core/Engines/engine';
 import { Scene } from '@babylonjs/core/scene';
-import { ArcRotateCamera } from '@babylonjs/core/Cameras/arcRotateCamera';
+import { UniversalCamera } from '@babylonjs/core/Cameras/universalCamera';
 import { Vector3 } from '@babylonjs/core/Maths/math';
 import { AdvancedDynamicTexture } from '@babylonjs/gui/2D';
 
@@ -9,6 +9,7 @@ import { KeybindsConfig } from './Configs/keybindsConfig';
 import { DebugConfig } from './Configs/debugConfig';
 import { Level } from './Levels/level';
 import { Player } from './Entities/player';
+import { Rectangle } from './gui/rectangle';
 
 function enablePointerLock() {
 	this.requestPointerLock();
@@ -24,11 +25,13 @@ export class Game {
 		this.engine = new Engine(this.canvas, true, {
 			deterministicLockstep: true,
 			lockstepMaxSteps: 4
-		});
+		}, false);
 
+		//this.uiScale = 1024 / 1920;
+		this.uiScale = 1;
 		this.cameraConfig = new CameraConfig();
 		this.keybindsConfig = new KeybindsConfig();
-		this.debugConfig = new DebugConfig(this.engine, this.canvas);
+		this.debugConfig = new DebugConfig(this.engine, this.canvas, this.uiScale);
 
 		/**
 		 * @type {!Entities[]}
@@ -45,7 +48,8 @@ export class Game {
 
 		this.uiScene = new Scene(this.engine);
 		this.uiScene.autoClear = false;
-		this.uiCamera = new ArcRotateCamera('uicamera', 0, 0.8, 100, Vector3.Zero(), this.uiScene);
+		this.uiCamera = new UniversalCamera('uicamera', new Vector3(0, 0, -1), this.uiScene);
+		this.uiCamera.setTarget(Vector3.Zero());
 		this.ui = this.initializeGui();
 		this.debugConfig.enable(this.uiScene, this.ui);
 		this.updateConfig();
@@ -96,9 +100,15 @@ export class Game {
 	}
 
 	/**
-	 * @returns {!Scene}
+	 * @returns {!AdvancedDynamicTexture}
 	 */
 	initializeGui() {
-		return AdvancedDynamicTexture.CreateFullscreenUI('UI', this.uiScene);
+		// TODO: Don't create a fullscreen ui, instead create small GUI textures for each part of the HUD
+		//       and add them to the uiScene individually
+		//const ui = AdvancedDynamicTexture.CreateFullscreenUI('UI', this.uiScene);
+		const ui = new Rectangle('ui', {}, this.uiScene);
+		//ui.idealWidth = 1920 * this.uiScale;
+		//ui.renderAtIdealSize = true;
+		return ui.adt;
 	}
 };

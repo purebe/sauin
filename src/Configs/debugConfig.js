@@ -9,13 +9,14 @@ export class DebugConfig {
 	/**
 	 * @param {!Engine} engine
 	 * @param {!HTMLElement} element
+	 * @param {!number} uiScale
 	 */
-	constructor(engine, element) {
+	constructor(engine, element, uiScale) {
 		this.engine = engine;
 
 		this.rect = new Rectangle();
 		this.rect.adaptWidthToChildren = true;
-		this.rect.height = "100px";
+		this.rect.height = `${Math.round(100 * uiScale)}px`;
 		this.rect.cornerRadius = 4;
 		this.rect.color = 'orange';
 		this.rect.background = '#00F1001A'; 
@@ -26,17 +27,17 @@ export class DebugConfig {
 		this.rect.shadowOffsetY = 2;
 		this.rect.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_RIGHT;
 		this.rect.verticalAlignment = Control.VERTICAL_ALIGNMENT_TOP;
-		this.rect.paddingRight = '30px';
-		this.rect.paddingTop = '30px';
+		this.rect.paddingRight = `${Math.round(30 * uiScale)}px`;
+		this.rect.paddingTop = `${Math.round(30 * uiScale)}px`;
 
 		this.fps = new KeyBind(Key.F6);
 		this.fps.register(element);
 		this.enableFps = false;
 		this.fpsText = new TextBlock();
 		this.fpsText.color = '#fff';
-		this.fpsText.fontSize = 18;
-		this.fpsText.width = '130px';
-		this.fpsText.margin = '20px';
+		this.fpsText.fontSize = Math.round(18 * uiScale);
+		this.fpsText.width = `${Math.round(130 * uiScale)}px`;
+		this.fpsText.margin = `${Math.round(20 * uiScale)}px`;
 
 		this.boundingBoxes = new KeyBind(Key.F7);
 		this.boundingBoxes.register(element);
@@ -56,9 +57,15 @@ export class DebugConfig {
 		this.ui = null;
 
 		this._update = this.update.bind(this);
+
+		this.lastRender = window.performance.now();
 	}
 
-	update() {
+	/**
+	 * @param {!Scene} scene
+	 */
+	update(scene) {
+		const now = window.performance.now();
 		if (this.ui === null) {
 			return;
 		}
@@ -73,8 +80,9 @@ export class DebugConfig {
 			this.rect.removeControl(this.fpsText);
 			this.ui.removeControl(this.rect);
 		}
-		if (this.fps.toggled) {
-			this.fpsText.text = `${this.engine.getFps().toPrecision(4)} fps`;
+		if (this.fps.toggled && now > this.lastRender + 1000) {
+			this.fpsText.text = `${this.engine.getFps().toPrecision(3)} fps`;
+			this.lastRender = now;
 		}
 
 		if (this.boundingBoxes.pressed && !this.enableBoundingBoxes) {
@@ -106,7 +114,7 @@ export class DebugConfig {
 	 */
 	enable(scene, ui) {
 		this.ui = ui;
-		scene.registerBeforeRender(this._update);
+		scene.registerAfterRender(this._update);
 		return this;
 	}
 };

@@ -31,6 +31,8 @@ export class Level {
 		this.scene.gravity = new Vector3(0, -9.81, 0);
 		this.scene.enablePhysics(this.scene.gravity, new AmmoJSPlugin(false, Ammo));
 		this.scene.collisionsEnabled = true;
+		//this.scene.autoClear = false; // Color buffer
+		//this.scene.autoClearDepthAndStencil = false; // Depth and stencil, obviously
 
 		const light = new HemisphericLight('light1', new Vector3(0, 1, 0), this.scene);
 		light.intensity = 0.7;
